@@ -1,14 +1,19 @@
+import time
+
+
 class Node:
     def __init__(self, key, value):
         self.key = key
         self.value = value
         self.prev = None
         self.next = None
+        self.timestamp = time.time()
 
 
 class LRUCache:
-    def __init__(self, capacity):
+    def __init__(self, capacity, expiration_time_seconds):
         self.capacity = capacity
+        self.expiration_time_seconds = expiration_time_seconds
         self.cache = {}
         self.head = Node(None, None)  # Creating Head Node
         self.tail = Node(None, None)  # Creating Head Node
@@ -23,6 +28,10 @@ class LRUCache:
         """
         if key in self.cache:
             node = self.cache[key]
+            if self.is_expired(node):
+                self.remove_node(node)
+                del self.cache[key]
+                return -1  # Expired, return -1, Read data from DB and perform Insert
             self.move_to_head(node)
             return node.value
         return -1  # Not found, Read data from DB and perform Insert
@@ -37,6 +46,7 @@ class LRUCache:
         if key in self.cache:
             node = self.cache[key]
             node.value = value
+            node.timestamp = time.time()  # update timestamp
             self.move_to_head(node)
         else:
             if len(self.cache) == self.capacity:
@@ -68,6 +78,7 @@ class LRUCache:
         next_node = node.next
         prev_node.next = next_node
         next_node.prev = prev_node
+        return node
 
     def remove_tail(self):
         if len(self.cache) > 0:
@@ -85,8 +96,10 @@ class LRUCache:
     def get_list(self):
         """
         @return list
-        Returns the whole doubly link list using a list
+        - evict expired cache items
+        - Returns the whole doubly link list using a list
         """
+        self.evict_expired_entries()
         current_node = self.head.next
         linked_list = []
         while current_node is not None and current_node != self.tail:
@@ -94,9 +107,25 @@ class LRUCache:
             current_node = current_node.next
         return linked_list
 
+    def is_expired(self, node):
+        return (time.time() - node.timestamp) > self.expiration_time_seconds
+
+    def evict_expired_entries(self):
+        """
+        evict expired cache items and delete nodes
+        """
+        current_node = self.head.next
+        while current_node is not None and current_node != self.tail:
+            if self.is_expired(current_node):
+                self.remove_node(current_node)
+                del self.cache[current_node.key]
+                current_node = current_node.next
+            else:
+                current_node = current_node.next
+
 
 # Example usage:
-lru_cache = LRUCache(2)  # Set storage capacity = 2
+lru_cache = LRUCache(2, 10)  # Set storage capacity = 2, expiration_time 10 sec
 
 lru_cache.insert(1, 1)  # Insert 1 to cache : Cache status [1]
 lru_cache.insert(2, 2)  # Insert 2 to cache : Cache status [2, 1]
@@ -113,3 +142,7 @@ print(lru_cache.get_list())
 
 print(lru_cache.get(1))  # Least recently used 1 moves to the top : Cache status [1, 5]
 print(lru_cache.get_list())
+
+
+time.sleep(12)  # Wait 12 sec to expire all cache entry
+print(lru_cache.get_list())  # Cache expired: Cache status []
