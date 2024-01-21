@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "25c871f4-a662-4ab8-aace-cb7b4df38d32",
+		"name": "LRU cache Flask API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24506611",
+		"_collection_link": "https://universal-meadow-559603.postman.co/workspace/influencer~cdab71bf-19c4-44e5-a125-34e404186f1e/collection/24506611-25c871f4-a662-4ab8-aace-cb7b4df38d32?action=share&source=collection_link&creator=24506611"
+	},
+	"item": [
+		{
+			"name": "Insert a key/value to LRU Cache",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"key\": 2,\r\n    \"value\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/insert",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Key value by key ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/get?key=2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all key value from LRU Cache",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/get_list",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"get_list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
