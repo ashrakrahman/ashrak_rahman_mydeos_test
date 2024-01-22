@@ -17,3 +17,9 @@ Workflows:
   3. http://127.0.0.1:5000/get_list - GET
 
   ```
+
+- GeoDistributedLRUCacheServer class initiates Cache capacity, Cache exiration time and users current geo location.
+
+- Based on the users geo location, the server can be configured with multiple sharding of Database instances. So that, the data can be available from the closest region of a user.
+
+- In the insert service, a thread is implemented. So that, it be executes asynchronously in the background, enabling the server to continue serving other request.
