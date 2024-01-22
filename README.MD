@@ -23,3 +23,7 @@ Workflows:
 - Based on the users geo location, the server can be configured with multiple sharding of Database instances. So that, the data can be available from the closest region of a user.
 
 - In the insert service, a thread is implemented. So that, it be executes asynchronously in the background, enabling the server to continue serving other request.
+
+## Author
+
+Ashrak Rahman Lipu - [@linkedin](https://www.linkedin.com/in/ashrakrahman/) - ashrakrahman@gmail.com
